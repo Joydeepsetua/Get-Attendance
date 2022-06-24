@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/attendance_menu_item"
+        android:icon="@drawable/attendance_icon"
+        android:title="Attendance" />
+    <item
+        android:id="@+id/class_menu_item"
+        android:icon="@drawable/classroom_icon"
+        android:title="Class" />
+    <item
+        android:id="@+id/report_menu_item"
+        android:icon="@drawable/report_icon"
+        android:title="Report" />
+    <item
+        android:id="@+id/export_menu_item"
+        android:icon="@drawable/export_icon"
+        android:title="Export" />
+</menu>

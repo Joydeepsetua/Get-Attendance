@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Get Attendance</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_attendance">Hello Attendance</string>
+    <string name="hello_class">Hello Class</string>
+    <string name="todo">TODO</string>
+    <string-array name="branch">
+        <item>Select Branch</item>
+        <item>CSE</item>
+        <item>IT</item>
+    </string-array>
+</resources>

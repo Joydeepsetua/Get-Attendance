@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:onClick="call"
+    tools:context=".Fragment.StudentDetail">
+
+    <ImageButton
+        android:id="@+id/backIcon"
+        android:layout_width="48dp"
+        android:layout_height="45dp"
+        android:background="@drawable/bg2"
+        android:src="@drawable/ic_baseline_arrow_back_24" />
+
+    <TextView
+        android:id="@+id/viewClassName"
+        android:layout_width="363dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="0dp"
+        android:layout_toRightOf="@id/backIcon"
+        android:background="@drawable/bg2"
+        android:paddingTop="5dp"
+        android:textAlignment="gravity"
+        android:textColor="#FFFFFF"
+        android:textSize="22dp"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/studentList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/backIcon"
+        android:layout_marginTop="10dp" />
+
+    <ImageButton
+        android:id="@+id/addImageBtn"
+        android:layout_width="62dp"
+        android:layout_height="61dp"
+        android:background="@color/white"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_baseline_add_student_image" />
+</RelativeLayout>
