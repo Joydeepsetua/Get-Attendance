@@ -1,18 +1,26 @@
 package com.example.majorproject.Fragment;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +39,11 @@ import com.example.majorproject.StudentTouchHelper;
 import com.example.majorproject.adapter.StudentAdapter;
 import com.example.majorproject.classes.Student;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class StudentDetail extends Fragment {
@@ -42,11 +53,16 @@ public class StudentDetail extends Fragment {
     private ImageButton addImageBtn;
     private EditText _studentName,_studentRollNo;
     private TextView viewClassName;
+    private Button importCSV;
     private Button _studentAddBtn;
     public Context context;
     private  MainActivity context1;
     private RecyclerView studentList;
     public List<Student>students;
+    public static final int requstcode = 1;
+    private  static  final int PermitionRequestCode=20;
+    private List<List<String>> data = new ArrayList<>();
+    StudentAdapter studentAdapter;
 
 
     public StudentDetail( ) {
@@ -74,12 +90,13 @@ public class StudentDetail extends Fragment {
         studentList=view.findViewById(R.id.studentList);
         backButton=view.findViewById(R.id.backIcon);
         viewClassName=view.findViewById(R.id.viewClassName);
+
         viewClassName.setText(className);
 
         context=container.getContext();
         StudentTouchHelper.containerView=container;
         studentArray();
-        StudentAdapter studentAdapter=new StudentAdapter(students);
+        studentAdapter=new StudentAdapter(students);
         studentAdapter.db = new Database(context);
         studentList.setLayoutManager(new LinearLayoutManager(view.getContext()));
         studentList.setAdapter(studentAdapter);
@@ -97,10 +114,23 @@ public class StudentDetail extends Fragment {
                 View dilogBox = LayoutInflater.from(context).inflate( R.layout.dialogbox_add_student,container,false);
                 _studentName=dilogBox.findViewById(R.id.studentName);
                 _studentRollNo=dilogBox.findViewById(R.id.studentRollNo);
+                importCSV=dilogBox.findViewById(R.id.importCSV);
 
                 builder.setView(dilogBox);
                 AlertDialog action = builder.create();
                 action.show();
+                importCSV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        requestPermition();
+                        Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("*/*");
+                        startActivityForResult(intent,requstcode);
+                        action.cancel();
+                    }
+                });
+
+
                 dilogBox.findViewById(R.id.studentAddBtn).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -112,13 +142,13 @@ public class StudentDetail extends Fragment {
                         }
                         else {
                            // Toast.makeText(context, studentName+studentRollNo+" "+classId, Toast.LENGTH_SHORT).show();
-                            Database g =new Database(context);
+                            Database g =Database.Database(context);
                             SQLiteDatabase db=g.getWritableDatabase();
                             Boolean i = g.insert_student(classId,studentName,studentRollNo);
                             if (i == true) {
                                 Toast.makeText(context, "Successfull", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(context, "Not Successfull", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Roll no already Exist", Toast.LENGTH_SHORT).show();
                             }
                             studentArray();
                             studentAdapter.localDataSet = students;
@@ -135,17 +165,16 @@ public class StudentDetail extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "okk", Toast.LENGTH_SHORT).show();
-//                Class clas = new Class();
-//                clas.setMainclass(context1);
-//                getParentFragmentManager().beginTransaction().replace(R.id.fragmentContainer,clas).commit();
+//                Toast.makeText(context, "okk", Toast.LENGTH_SHORT).show();
+                Class clas = new Class();
+                getParentFragmentManager().beginTransaction().replace(R.id.fragmentContainer,clas).commit();
             }
         });
 
         return view;
     }
     public void studentArray(){
-        Database g=new Database(context);
+        Database g=Database.Database(context);
         this.students = new ArrayList<Student>();
         Cursor t= g.select_student(classId);
         try {
@@ -165,6 +194,55 @@ public class StudentDetail extends Fragment {
             Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
         }
     }
+    private void requestPermition (){
+//        Log.e("TAG", "requestPermition: yes");
+        ActivityCompat.requestPermissions(getActivity(),new String[]{WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE},PermitionRequestCode);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        switch (requestCode) {
+
+            case 1:
+                String path =data.getData().getPath();
+
+                if (path.contains("/root_path"))
+                    path = path.replace("/root_path", "");
+                path =  Environment.getExternalStorageDirectory().getPath() +"/"+path.split(":")[1];
+
+                try {
+                    this.data= new ArrayList<>();
+                    FileReader file = new FileReader(path);
+                    try {
+                        Scanner myReader = new Scanner(file);
+                        while(myReader.hasNextLine()){
+                            String []temp = myReader.nextLine().split(",");
+                            String data_roll_no=temp[0];
+                            String data_name=temp[1];
+//                            Log.d("TAG", "Name: "+data_name+" , Roll: "+data_roll_no);
+                            Database g =Database.Database(context);
+                            SQLiteDatabase db=g.getWritableDatabase();
+                            g.insert_student(classId,data_name,data_roll_no);
+
+                        }
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                catch (IOException e) {
+//                    Log.d("TAG", "IDexception: "+e);
+                    e.printStackTrace();
+                }
+                finally {
+                    studentArray();
+                    studentAdapter.localDataSet = students;
+                    studentAdapter.notifyDataSetChanged();
+                }
+            default:{}
+
+        }
+    }
 }

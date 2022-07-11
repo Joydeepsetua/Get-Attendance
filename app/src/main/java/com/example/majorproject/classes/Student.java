@@ -4,6 +4,7 @@ public class Student {
     String studentId;
     String studentName;
     String StudentRollNo;
+    String count;
 
     public Student(String studentName, String studentRollNo) {
         this.studentName = studentName;
@@ -14,6 +15,23 @@ public class Student {
         this.studentId = studentId;
         this.studentName = studentName;
         StudentRollNo = studentRollNo;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentId='" + studentId + '\'' +
+                ", studentName='" + studentName + '\'' +
+                ", StudentRollNo='" + StudentRollNo + '\'' +
+                ", count='" + count + '\'' +
+                '}';
+    }
+
+    public Student(String studentId, String studentName, String studentRollNo, String count) {
+        this.studentId = studentId;
+        this.studentName = studentName;
+        StudentRollNo = studentRollNo;
+        this.count = count;
     }
 
     public String getStudentName() {
@@ -38,5 +56,13 @@ public class Student {
 
     public void setStudentId(String studentId) {
         this.studentId = studentId;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
     }
 }

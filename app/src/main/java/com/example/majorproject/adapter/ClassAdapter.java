@@ -2,6 +2,7 @@ package com.example.majorproject.adapter;
 
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,11 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.majorproject.Database;
 import com.example.majorproject.Fragment.Class;
 import com.example.majorproject.R;
 import com.example.majorproject.classes.Clas;
+import com.example.majorproject.classes.Student;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ViewHolder> 
 
     public List<Clas> localDataSet;
     public Class cls;
+    public Database db;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -50,6 +54,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ViewHolder> 
         public TextView getTextView3() {
             return textView3;
         }
+        public TextView getTextView4() {       return textView4;   }
         public View getView() {
             return view;
         }
@@ -85,6 +90,8 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ViewHolder> 
         viewHolder.getTextView1().setText(localDataSet.get(position).getSub_name());
         viewHolder.getTextView2().setText(localDataSet.get(position).getCourse_name());
         viewHolder.getTextView3().setText(localDataSet.get(position).getClass_name());
+        viewHolder.getTextView4().setText(localDataSet.get(position).getStudentCount());
+
         viewHolder.getView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,8 +100,26 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ViewHolder> 
 
             }
         });
-    }
 
+    }
+    public void deleteClass(int position) {
+        Clas item = localDataSet.get(position);
+        String id = item.getClass_id();
+//        Log.d("gg", "deleteClass: "+id);
+        db.delete_class(id);
+        localDataSet.remove(position);
+        notifyItemRemoved(position);
+    }
+    public String[] fetchClass(int position){
+        Clas item = localDataSet.get(position);
+        String id= item.getClass_id();
+        String subject= item.getSub_name();
+        String course= item.getCourse_name();
+        String class_name= item.getClass_name();
+        return new String[]{id,subject,course,class_name};
+
+
+    }
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.Report">
 
     <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
         android:id="@+id/fragment_report"
         android:layout_width="match_parent"
@@ -18,4 +21,47 @@
         android:textSize="24sp"
         android:textStyle="bold"/>
 
-</FrameLayout>
+        <Spinner
+            android:id="@+id/report_spinner_class_name"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fragment_report"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp" />
+
+        <Spinner
+            android:id="@+id/report_spinner_course_name"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/report_spinner_class_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp" />
+
+        <Spinner
+            android:id="@+id/report_spinner_subject_name"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/report_spinner_course_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp" />
+
+        <Button
+            android:id="@+id/report_click_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/report_spinner_subject_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:text="view" />
+
+        <Button
+            android:id="@+id/exportExcel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/report_spinner_subject_name"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="60dp"
+            android:layout_toRightOf="@id/report_click_btn"
+            android:text="Export" />
+    </RelativeLayout>
+</ScrollView>

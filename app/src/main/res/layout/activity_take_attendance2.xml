@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".takeAttendance">
 
+<!--    <ImageView-->
+<!--        android:id="@+id/save"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/view_date"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:layout_alignParentBottom="false"-->
+<!--        android:layout_centerHorizontal="false"-->
+<!--        android:layout_marginRight="20dp"-->
+<!--        android:src="@drawable/ic_baseline_save_24" />-->
+
     <TextView
         android:id="@+id/view_sub_name"
         android:layout_width="match_parent"
@@ -32,9 +43,30 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/studentRecyclerView"
-        android:layout_width="409dp"
-        android:layout_height="729dp"
-        android:layout_below="@id/view_date"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/save"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp" />
+
+    <ImageView
+        android:id="@+id/save"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/view_date"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="11dp"
+        app:srcCompat="@drawable/ic_baseline_save_24" />
+
+    <TextView
+        android:id="@+id/presentTotalStudent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_date"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textColor="#F57F17"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 </RelativeLayout>

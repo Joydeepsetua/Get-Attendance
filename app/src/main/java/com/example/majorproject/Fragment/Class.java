@@ -1,5 +1,8 @@
 package com.example.majorproject.Fragment;
 
+import static android.icu.lang.UCharacter.toUpperCase;
+
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,10 +22,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.majorproject.ClassTouchHelper;
 import com.example.majorproject.Database;
 import com.example.majorproject.MainActivity;
 import com.example.majorproject.R;
 import com.example.majorproject.CustomFragment;
+import com.example.majorproject.StudentTouchHelper;
 import com.example.majorproject.adapter.ClassAdapter;
 import com.example.majorproject.classes.Clas;
 
@@ -33,9 +39,11 @@ public class Class extends CustomFragment {
     private EditText subject,course,clas;
     private Button addBtn;
     private MainActivity context;
-    private ViewGroup viewGroup;
+    public ViewGroup viewGroup;
     private RecyclerView recyclerView;
-    private List<Clas>_clas;
+    public List<Clas>_clas;
+
+
     public Class() {
         // Required empty public constructor
     }
@@ -73,9 +81,15 @@ public class Class extends CustomFragment {
 
         ClassAdapter classAdapter=new ClassAdapter(_clas);
         classAdapter.cls = this;
+
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(classAdapter);
-
+        classAdapter.db=Database.Database(context);
+        ClassTouchHelper classTouchHelper = new ClassTouchHelper(classAdapter);
+        classTouchHelper.aClass=Class.this;
+        classTouchHelper.context = getContext();
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(classTouchHelper);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         view.findViewById(R.id.addclassbtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,8 +108,8 @@ public class Class extends CustomFragment {
                     @Override
                     public void onClick(View view) {
                         String subject1 = subject.getText().toString();
-                        String course1 = course.getText().toString();
-                        String clas1 = clas.getText().toString();
+                        String course1 = toUpperCase(course.getText().toString());
+                        String clas1 = toUpperCase(clas.getText().toString());
                         if (subject1.equals("") || course1.equals("") || clas1.equals("")){
                             Toast.makeText(context, "Enter all the Fields ", Toast.LENGTH_SHORT).show();
                         }
@@ -130,11 +144,12 @@ public class Class extends CustomFragment {
         studentDetail.classId = classId;
         studentDetail.className=classNmae;
         getParentFragmentManager().beginTransaction().replace(R.id.fragmentContainer,studentDetail).commit();
+
     }
     public void classArray(){
         Database g=Database.Database(context);
         _clas = new ArrayList<Clas>();
-        Cursor t= g.select_class();
+        Cursor t= g.countClassStudent();
         try {
             if(t.moveToFirst()){
                 do{
@@ -142,7 +157,8 @@ public class Class extends CustomFragment {
                     String sub_name = t.getString(1);
                     String course_name = t.getString(2);
                     String  class_name= t.getString(3);
-                    Clas obj = new Clas(class_id,sub_name ,course_name, class_name);
+                    String  studentCount= t.getString(4);
+                    Clas obj = new Clas(class_id,sub_name ,course_name, class_name,studentCount);
                     _clas.add(obj);
                 }
                 while(t.moveToNext());

@@ -5,6 +5,7 @@ public class Clas {
     String sub_name;
     String course_name;
     String class_name;
+    String studentCount;
 
     public Clas(String sub_name, String course_name, String class_name) {
         this.sub_name = sub_name;
@@ -19,7 +20,13 @@ public class Clas {
         this.class_name = class_name;
     }
 
-
+    public Clas(String class_id, String sub_name, String course_name, String class_name, String studentCount) {
+        this.class_id = class_id;
+        this.sub_name = sub_name;
+        this.course_name = course_name;
+        this.class_name = class_name;
+        this.studentCount = studentCount;
+    }
 
     public Clas(String class_name) {
         this.class_name = class_name;
@@ -55,5 +62,13 @@ public class Clas {
 
     public void setClass_id(String class_id) {
         this.class_id = class_id;
+    }
+
+    public String getStudentCount() {
+        return studentCount;
+    }
+
+    public void setStudentCount(String studentCount) {
+        this.studentCount = studentCount;
     }
 }

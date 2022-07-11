@@ -24,8 +24,8 @@
         android:text="TextView"
         android:textSize="18dp" />
 
-    <Switch
-        android:id="@+id/switch1"
+    <CheckBox
+        android:id="@+id/checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
