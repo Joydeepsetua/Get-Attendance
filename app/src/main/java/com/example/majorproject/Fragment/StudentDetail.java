@@ -3,14 +3,20 @@ package com.example.majorproject.Fragment;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -21,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
+import android.os.storage.StorageManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +46,7 @@ import com.example.majorproject.StudentTouchHelper;
 import com.example.majorproject.adapter.StudentAdapter;
 import com.example.majorproject.classes.Student;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -125,7 +133,7 @@ public class StudentDetail extends Fragment {
                         requestPermition();
                         Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
                         intent.setType("*/*");
-                        startActivityForResult(intent,requstcode);
+                        someActivityResultLauncher.launch(intent);
                         action.cancel();
                     }
                 });
@@ -199,50 +207,62 @@ public class StudentDetail extends Fragment {
         ActivityCompat.requestPermissions(getActivity(),new String[]{WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE},PermitionRequestCode);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
 
-            case 1:
-                String path =data.getData().getPath();
+    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        new ActivityResultCallback<ActivityResult>() {
+            private ArrayList<Object> data;
 
-                if (path.contains("/root_path"))
-                    path = path.replace("/root_path", "");
-                path =  Environment.getExternalStorageDirectory().getPath() +"/"+path.split(":")[1];
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    // There are no request codes
+                    Intent d = result.getData();
+//                    Log.d("GPD", "onActivityResult: "+d.getData().getPath());
 
-                try {
-                    this.data= new ArrayList<>();
-                    FileReader file = new FileReader(path);
+                    String path = getInternalStorageDirectoryPath(getContext()) +"/"+d.getData().getPath().split(":")[1];
+//                    Log.d("GPD", "onActivityResult: "+path);
                     try {
-                        Scanner myReader = new Scanner(file);
-                        while(myReader.hasNextLine()){
-                            String []temp = myReader.nextLine().split(",");
-                            String data_roll_no=temp[0];
-                            String data_name=temp[1];
+                        this.data= new ArrayList<>();
+                        FileReader file = new FileReader(path);
+                        try {
+                            Scanner myReader = new Scanner(file);
+                            while(myReader.hasNextLine()){
+                                String []temp = myReader.nextLine().split(",");
+                                String data_roll_no=temp[0];
+                                String data_name=temp[1];
 //                            Log.d("TAG", "Name: "+data_name+" , Roll: "+data_roll_no);
-                            Database g =Database.Database(context);
-                            SQLiteDatabase db=g.getWritableDatabase();
-                            g.insert_student(classId,data_name,data_roll_no);
+                                Database g =Database.Database(context);
+                                SQLiteDatabase db=g.getWritableDatabase();
+                                g.insert_student(classId,data_name,data_roll_no);
 
+                            }
                         }
-                    }
-                    catch (Exception e) {
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
+                    finally {
+                        studentArray();
+                        studentAdapter.localDataSet = students;
+                        studentAdapter.notifyDataSetChanged();
+                    }
                 }
-                catch (IOException e) {
-//                    Log.d("TAG", "IDexception: "+e);
-                    e.printStackTrace();
-                }
-                finally {
-                    studentArray();
-                    studentAdapter.localDataSet = students;
-                    studentAdapter.notifyDataSetChanged();
-                }
-            default:{}
+            }
+        });
 
+                
+                
+
+    public  String getInternalStorageDirectoryPath(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            StorageManager storageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+            return storageManager.getPrimaryStorageVolume().getDirectory().getAbsolutePath();
+        } else {
+            return Environment.getExternalStorageDirectory().getAbsolutePath();
         }
     }
 }

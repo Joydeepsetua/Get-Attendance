@@ -247,8 +247,44 @@ public class Database extends SQLiteOpenHelper {
 //    table attendance_master (id integer primary key autoincrement , date varchar, duration varchar , period_type varchar, class_id varchar,topic varchar )";
 public Cursor select_attendance_date(String classId) {
     SQLiteDatabase db = this.getReadableDatabase();
-    Cursor cursor = db.rawQuery("select date from attendance_master where class_id =" + classId + " order by date asc;", null);
+    Cursor cursor = db.rawQuery("select date, id , class_id from attendance_master where class_id =" + classId + " order by date asc;", null);
     return cursor;
 }
+    public Cursor getReport(String id){
+        String sql="SELECT *\n" +
+                "  FROM (\n" +
+                "           SELECT student.student_name,\n" +
+                "                  student.student_roll_no,\n" +
+                "                  main.date,\n" +
+                "                  student.id,\n"+
+                "                  student.class_id\n" +
+                "             FROM student\n" +
+                "                  LEFT JOIN\n" +
+                "                  (\n" +
+                "                      SELECT student.id,\n" +
+                "                             attendance_master.date\n" +
+                "                        FROM student,\n" +
+                "                             attendance_master,\n" +
+                "                             daily_attendance\n" +
+                "                       WHERE student.id = daily_attendance.student_id AND \n" +
+                "                             attendance_master.id = daily_attendance.attendance_master_id\n" +
+                "                       ORDER BY date\n" +
+                "                  )\n" +
+                "                  main ON student.id = main.id\n" +
+                "       ) where class_id=" +
+                id+
+                "       order by date\n" +
+                "       ;\n";
+
+        Cursor report = getReadableDatabase().rawQuery(sql,null);
+//        Cursor date = getReadableDatabase().rawQuery("SELECT DISTINCT date FROM (SELECT student.student_name,student.student_roll_no,attendance_master.date FROM student,attendance_master,daily_attendance WHERE student.id = daily_attendance.student_id AND attendance_master.id = daily_attendance.attendance_master_id ORDER BY date);",null);
+//        Cursor student = getReadableDatabase().rawQuery("Select * from student;",null);
+        return report;
+    }
+    public Cursor select_attendance_master() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from attendance_master;", null);
+        return cursor;
+    }
 
 }

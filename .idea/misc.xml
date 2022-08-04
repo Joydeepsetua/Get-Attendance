@@ -15,6 +15,7 @@
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/drawable/image_bg.xml" value="0.2675" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/activity_main.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/activity_report.xml" value="0.34479166666666666" />
+        <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/activity_report_date_and_student_wise.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/activity_student_page.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/activity_student_page2.xml" value="0.2971014492753623" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/activity_take_attendance.xml" value="0.33" />
@@ -28,12 +29,13 @@
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/fragment_class.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/fragment_export.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/fragment_option_add_student.xml" value="0.34479166666666666" />
-        <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/fragment_report.xml" value="0.34479166666666666" />
+        <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/fragment_report.xml" value="0.33" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/fragment_student_detail.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/layout_class.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/layout_dates.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/layout_student.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/layout_student_attendance.xml" value="0.34479166666666666" />
+        <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/layout/layout_student_date_wise.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/menu/navbar_menu.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/menu/report_menu.xml" value="0.34479166666666666" />
         <entry key="..\:/Joydeep 5th Sem/Android/MajorProject/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2695" />
